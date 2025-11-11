@@ -9,7 +9,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=["http://localhost:3000", "https://your-vercel-app.vercel.app"])  # Enable CORS for frontend
 
 @app.route("/api/contact", methods=["POST"])
 def contact():
@@ -36,9 +36,9 @@ def contact():
         # Get email credentials from environment
         sender_email = os.getenv("SENDER_EMAIL")
         sender_password = os.getenv("EMAIL_PASSWORD")
-        receiver_email = os.getenv("RECEIVER_EMAIL")
+        your_email = os.getenv("YOUR_EMAIL")
 
-        if not sender_email or not sender_password or not receiver_email:
+        if not sender_email or not sender_password or not your_email:
             print("Missing email credentials in environment variables")
             return jsonify({"error": "Email service not configured"}), 500
 
@@ -62,7 +62,7 @@ You can reply directly to: {email}
         msg = MIMEMultipart()
         msg["Subject"] = f"New Portfolio Contact from {name}"
         msg["From"] = sender_email
-        msg["To"] = receiver_email
+        msg["To"] = your_email
         msg["Reply-To"] = email  # Allow easy reply to sender
 
         # Attach the message
